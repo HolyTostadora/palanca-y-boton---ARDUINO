@@ -2,18 +2,24 @@
 
 #define ABAJO1 2
 #define ARRIBA1 3
-#define DERECHA1 5
 #define IZQUIERDA1 4
+#define DERECHA1 5
 
-#define ABAJO2 9
-#define ARRIBA2 8
-#define DERECHA2 11
+#define ABAJO2 8
+#define ARRIBA2 9
 #define IZQUIERDA2 10
+#define DERECHA2 11
 
-#define BTN_R 7
+#define BTN_R A0
+#define BTN_T A1
+#define BTN_Y A2
+
+#define BTN_I A3
+#define BTN_O A4
+#define BTN_P A5
 
 
-/*
+/*wsddaaaa
 */
 
 void setup()
@@ -22,12 +28,19 @@ void setup()
   pinMode(ARRIBA1,INPUT_PULLUP);
   pinMode(DERECHA1,INPUT_PULLUP);
   pinMode(IZQUIERDA1,INPUT_PULLUP);  
+  
   pinMode(ABAJO2,INPUT_PULLUP);
   pinMode(ARRIBA2,INPUT_PULLUP);
   pinMode(DERECHA2,INPUT_PULLUP);
   pinMode(IZQUIERDA2,INPUT_PULLUP);  
   
   pinMode(BTN_R,INPUT_PULLUP);
+  pinMode(BTN_T,INPUT_PULLUP);
+  pinMode(BTN_Y,INPUT_PULLUP);
+  
+  pinMode(BTN_I,INPUT_PULLUP);
+  pinMode(BTN_O,INPUT_PULLUP);
+  pinMode(BTN_P,INPUT_PULLUP);
 
   Keyboard.begin();
 
@@ -47,6 +60,12 @@ void loop()
   BTN_on_click(IZQUIERDA2,KEY_LEFT_ARROW);
 
   BTN_on_click(BTN_R,'r');
+  BTN_on_click(BTN_T,'t');
+  BTN_on_click(BTN_Y,'y');
+
+  BTN_on_click(BTN_I,'i');
+  BTN_on_click(BTN_O,'o');
+  BTN_on_click(BTN_P,'p');
 
 }
 
