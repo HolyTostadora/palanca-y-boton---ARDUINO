@@ -19,7 +19,7 @@
 #define BTN_P A5
 
 
-/*wsddaaaa
+/* 
 */
 
 void setup()
@@ -80,5 +80,4 @@ void BTN_on_click(int direcc, char tecla)
   {
     Keyboard.release(tecla);
   }
-    
 }
