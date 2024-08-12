@@ -18,6 +18,10 @@
 #define BTN_O A4
 #define BTN_P A5
 
+#define D/C 12
+#define CS 13
+#define SDI 6
+#define SCK 7
 
 /* 
 */
