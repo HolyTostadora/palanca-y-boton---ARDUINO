@@ -3,12 +3,12 @@
 #include <Adafruit_ILI9341.h>
 
 #define CS 2
-#define RESET 3
+#define RESET PC6
 #define DC 4
-#define MOSI 5
-#define SCK 6
+#define MOSI 11
+#define SCK 13
 #define LED 7
-#define MISO 8
+#define MISO 12                
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341 (CS,DC,MOSI,SCK,RESET,MISO);
 
