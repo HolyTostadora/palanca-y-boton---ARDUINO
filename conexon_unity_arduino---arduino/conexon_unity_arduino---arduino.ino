@@ -1,15 +1,17 @@
+#include <SoftwareSerial.h>
+
+// Configura un puerto serial software en pines 10 y 11
+SoftwareSerial mySerial(10, 11); // RX, TX
+
 void setup() {
-  // Inicia la comunicación serial a 9600 baudios
-  Serial.begin(9600);
+    Serial.begin(9600);    // Puerto Serial principal para el Monitor Serial
+    mySerial.begin(9600);  // Puerto Serial software para la comunicación con Unity
 }
 
-void loop() {
-  // Verifica si hay datos disponibles en el puerto serial
-  if (Serial.available() > 0) {
-    // Lee la línea completa recibida desde Unity
-    String inputString = Serial.readStringUntil('\n');
-
-    // Envía el string recibido al Monitor Serial de Arduino
-    Serial.println("String recibido: " + inputString);
-  }
+void loop() { 
+    // Leer datos del puerto Serial (desde el Monitor Serial) y enviarlos al puerto Serial software
+    if (Serial.available()) {
+        String dataFromSerial = Serial.readStringUntil('\n');
+        mySerial.println(dataFromSerial);
+    }
 }

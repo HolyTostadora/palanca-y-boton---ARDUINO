@@ -21,31 +21,25 @@ MCUFRIEND_kbv tft;
 #define WHITE   0xFFFF
 
 void setup() {
+  Serial.begin(9600);
+  
   uint16_t ID = tft.readID(); 
   tft.begin(ID);
 
-  tft.fillScreen(BLACK);
-  tft.setTextColor(WHITE);
-  tft.setTextSize(5);
-  tft.setRotation(1);
-  //tft.setCursor(50,100);
-  //tft.println("Hola :D");
-
-  /*
-  int w = tft.width();
-  int h= tft.height();
-  tft.setCursor(0,120);
-  tft.print(w);
-  tft.setCursor(w/2,120);
-  tft.print(h);
-  */
-
-  drawThickLine(0, 0, 480, 320, 10, RED);
-  
+  tft.setRotation(1);  
+  tft.fillScreen(WHITE);
+  tft.setTextColor(BLACK);
+  tft.setTextSize(2);  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  if (Serial.available()) {
+        String dataFromSerial = Serial.readStringUntil('\n');
+        tft.fillScreen(WHITE);
+        tft.setCursor(0, 0);
+        tft.print("Recibido: ");
+        tft.println(dataFromSerial);
+    }
 
 }
 
