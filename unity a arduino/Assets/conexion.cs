@@ -6,13 +6,13 @@ using System.IO.Ports;
 
 public class conexion : MonoBehaviour
 {
+    public InputField m; // Make sure to assign this in the Unity Inspector
 
-    public InputField m;
+    SerialPort arduinoPort = new SerialPort("COM8", 9600); // Corrected port name format
 
-    SerialPort arduinoPort = new SerialPort("COM 8");
     private void Awake()
     {
-        arduinoPort.BaudRate = 9600;
+        // Set the serial port properties
         arduinoPort.Parity = Parity.None;
         arduinoPort.StopBits = StopBits.One;
         arduinoPort.DataBits = 8;
@@ -21,22 +21,68 @@ public class conexion : MonoBehaviour
 
     void Start()
     {
-
-        arduinoPort.Open();
-
+        // Open the serial port in Start()
+        try
+        {
+            if (!arduinoPort.IsOpen) // Check if the port is already open
+            {
+                arduinoPort.Open();
+                Debug.Log("Serial Port Opened");
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Failed to open serial port: " + e.Message);
+        }
     }
 
-    public void SendMessagetoArduino (string msg)
+    public void SendMessagetoArduino(string msg)
     {
-        arduinoPort.WriteLine(msg);
+        if (arduinoPort.IsOpen)
+        {
+            try
+            {
+                arduinoPort.WriteLine(msg);
+                Debug.Log("Message sent to Arduino: " + msg);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Failed to send message to Arduino: " + e.Message);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Serial port is not open.");
+        }
     }
 
-    public void btn ()
+    public void Btn()
     {
-        SendMessagetoArduino(m.text);
+        if (arduinoPort.IsOpen) // Ensure the port is open before sending the message
+        {
+            SendMessagetoArduino(m.text); // Ensure that m is properly initialized
+        }
+        else
+        {
+            Debug.LogWarning("Cannot send message, serial port is not open.");
+        }
     }
+
     public void ClosePort()
     {
-        arduinoPort.Close();  
+        if (arduinoPort.IsOpen)
+        {
+            arduinoPort.Close();
+            Debug.Log("Serial Port Closed");
+        }
+        else
+        {
+            Debug.LogWarning("Serial port is already closed.");
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        ClosePort(); // Close the port when the application quits
     }
 }
