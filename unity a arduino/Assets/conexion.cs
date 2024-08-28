@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO.Ports;
 
 public class conexion : MonoBehaviour
 {
-    SerialPort arduinoPort = new SerialPort("COM 4");
 
+    public InputField m;
+
+    SerialPort arduinoPort = new SerialPort("COM 8");
     private void Awake()
     {
         arduinoPort.BaudRate = 9600;
@@ -28,6 +31,10 @@ public class conexion : MonoBehaviour
         arduinoPort.WriteLine(msg);
     }
 
+    public void btn ()
+    {
+        SendMessagetoArduino(m.text);
+    }
     public void ClosePort()
     {
         arduinoPort.Close();  
