@@ -18,6 +18,8 @@
 #define BTN_O A4
 #define BTN_P A5
 
+#define BTN_MENU 7
+
 #define D/C 12
 #define CS 13
 #define SDI 6
@@ -46,6 +48,8 @@ void setup()
   pinMode(BTN_O,INPUT_PULLUP);
   pinMode(BTN_P,INPUT_PULLUP);
 
+  pinMode(BTN_MENU, INPUT_PULLUP);
+
   Keyboard.begin();
 
 }
@@ -70,6 +74,8 @@ void loop()
   BTN_on_click(BTN_I,'i');
   BTN_on_click(BTN_O,'o');
   BTN_on_click(BTN_P,'p');
+
+  BTN_on_click(BTN_MENU, 'm');
 
 }
 
