@@ -12,8 +12,13 @@ void setup() {
 }
 
 void loop() {
-  leds[0] = CRGB:: Red;
-  leds[1] = CRGB:: Green;
-  leds[2] = CRGB:: Blue;
-
+  for (int i=0;i<NUM_LEDS;i++)
+  {
+    leds[i] = CRGB::Yellow;
+    FastLED.show();
+    delay(500);
+    leds[i] = CRGB::Black;
+    FastLED.show();
+    delay(500);
+  }
 }
