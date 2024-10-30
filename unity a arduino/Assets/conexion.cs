@@ -39,16 +39,8 @@ public class conexion : MonoBehaviour
     {
         try
         {
-            // Enviar identificador
-            arduinoPort.WriteLine(identifier);
-            Debug.Log("Identifier sent to Arduino: " + identifier);
-
-            // Enviar los mensajes
-            foreach (string msg in messages)
-            {
-                arduinoPort.WriteLine(msg);
-                Debug.Log("Message sent to Arduino: " + msg);
-            }
+                string msg2send = identifier + "," + string.Join(",", messages);
+                arduinoPort.WriteLine(msg2send);
         }
         catch (System.Exception e)
         {
