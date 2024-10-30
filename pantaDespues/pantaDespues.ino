@@ -20,6 +20,10 @@ MCUFRIEND_kbv tft;
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
+
+const int maxStrings = 10; // Máximo número de elementos en el array
+String stringArray[maxStrings]; // Array para almacenar las cadenas
+
 void setup() {
   Serial.begin(9600);
   
@@ -35,10 +39,7 @@ void setup() {
 void loop() {
   if (Serial.available()) {
     String dataFromUnity = Serial.readStringUntil('\n'); // Lee el string enviado por Unity hasta un salto de línea
-
-    // Procesar el string recibido como un array de strings separados por comas
-    const int maxStrings = 10; // Máximo número de elementos en el array
-    String stringArray[maxStrings]; // Array para almacenar las cadenas
+    
     int index = 0;
 
     // Divide el string por comas y almacena en el array
@@ -56,7 +57,12 @@ void loop() {
       index++;
     }
   }
-  int id = stringArray[1].toInt();
+  int id = stringArray[0].toInt();
+  const int arraySize = sizeof(stringArray) / sizeof(stringArray[0]);  // Tamaño del array
+  for (int i = 0; i < arraySize - 1; i++) {
+    stringArray[i] = stringArray[i + 1];
+  }
+  stringArray[arraySize- 1] = "";
       
 
 }
