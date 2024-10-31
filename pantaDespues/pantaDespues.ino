@@ -143,6 +143,19 @@ void tilesAvanzadas2players(Result mensaje) {
   tft.setTextSize(4);
   tft.print("Score: " + mensaje.msgArray[1]);  // Mostrar el personaje que selecciona Player 2
 }
+void tilesAvanzadas1players(Result mensaje) {
+  tft.fillScreen(BLACK);
+
+  // Configuración para Player 1 en la mitad superior de la pantalla
+  tft.setCursor(65, 85);  // Posicionar en la mitad superior de la pantalla
+  tft.setTextSize(8);
+  tft.print("Player 1");
+
+  tft.setCursor(100, 200);  // Un poco más abajo para el nombre del personaje
+  tft.setTextSize(5);
+  tft.print("Score: " + mensaje.msgArray[0]);  // Mostrar el personaje que selecciona Player 1
+}
+
 
 void setup() {
   Serial.begin(9600);
@@ -155,13 +168,13 @@ void setup() {
 
   prueba.msgArray[0]=200;
   prueba.msgArray[1]=220;
-  tilesAvanzadas2players(prueba);
+  tilesAvanzadas1players(prueba);
 
 }
 
 void loop() {
 
-  /*
+ /*
   prueba.msgArray[0] = "3";
   prueba.msgArray[1] = "30";
   
@@ -185,7 +198,21 @@ void loop() {
   mostrarSeleccion2Personajes(prueba);
 
   delay(1000);
+
+  prueba.msgArray[0]=200;
+  prueba.msgArray[1]=220;
+  tilesAvanzadas1players(prueba);
+  
+  delay(1000);
+
+  prueba.msgArray[0]=2000;
+  prueba.msgArray[1]=2100;
+  tilesAvanzadas2players(prueba);
+
+  delay(1000);
+
   */
+  
     if (Serial.available()) {
       String string2convert = Serial.readStringUntil('\n');
       Result mensaje = string2array(string2convert);
