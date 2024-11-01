@@ -32,7 +32,7 @@ Result string2array(String string2convert) {
   Result res;
   int index = 0;
 
-  // Divide el string por comas y almacena en el array
+  // Divide the string by commas and store in the array
   while (string2convert.length() > 0 && index < maxStrings) {
     int commaIndex = string2convert.indexOf(',');
     if (commaIndex == -1) {
@@ -45,15 +45,14 @@ Result string2array(String string2convert) {
     index++;
   }
 
-  // Convertir el primer elemento a int y almacenarlo en id
+  // Convert the first element to int and store in id
   res.id = res.msgArray[0].toInt();
 
-  // Eliminar el primer elemento desplazando los demás
-  const int arraySize = index;
-  for (int i = 0; i < arraySize - 1; i++) {
+  // Shift elements left after extracting id
+  for (int i = 0; i < index - 1; i++) {
     res.msgArray[i] = res.msgArray[i + 1];
   }
-  res.msgArray[arraySize - 1] = "";  // Limpiar la última posición
+  //res.msgArray[index - 1] = "";  // Clear last position if shifted
 
   return res;
 }
@@ -96,30 +95,32 @@ void mostrarSeleccion1Personajes(Result mensaje) {
 void mostrarPuntuacionesTennis(Result mensaje) {
   tft.fillScreen(BLACK);
 
-  // Configuración para Player 1
-  tft.setTextSize(5);  // Tamaño de texto más grande para Player 1
-  tft.setCursor(125, 40);  // Posicionar en la parte superior
-  tft.print("Player 1");
+  // Check if at least 4 elements are available
+  if (mensaje.msgArray[0] != "" && mensaje.msgArray[1] != "" &&
+      mensaje.msgArray[2] != "" && mensaje.msgArray[3] != "") {
+    
+    // Display Player 1 information
+    tft.setTextSize(5);
+    tft.setCursor(125, 40);
+    tft.print("Player 1");
+    tft.setTextSize(3);
+    tft.setCursor(80, 110);
+    tft.print("Games: " + mensaje.msgArray[0]);
+    tft.setCursor(260, 110);
+    tft.print("Points: " + mensaje.msgArray[1]);
 
-  // Mostrar game sets y puntos de Player 1 en la misma línea
-  tft.setTextSize(3);
-  tft.setCursor(90, 110);  // Un poco más abajo
-  tft.print("Games: " + mensaje.msgArray[0]);  // Mostrar los games de Player 1
-  tft.setCursor(250, 110);  // Espacio para los puntos
-  tft.print("Points: " + mensaje.msgArray[1]);  // Mostrar los puntos de Player 1
-
-
-  // Configuración para Player 2
-  tft.setTextSize(5);  // Tamaño de texto más grande para Player 2
-  tft.setCursor(125, 180);  // Posicionar en la parte inferior del Player 1
-  tft.print("Player 2");
-
-  // Mostrar game sets y puntos de Player 2 en la misma línea
-  tft.setTextSize(3);
-  tft.setCursor(90, 250);  // Un poco más abajo
-  tft.print("Games: " + mensaje.msgArray[2]);  // Mostrar los games de Player 2
-  tft.setCursor(250, 250);  // Espacio para los puntos
-  tft.print("Points: " + mensaje.msgArray[3]);  // Mostrar los puntos de Player 2
+    // Display Player 2 information
+    tft.setTextSize(5);
+    tft.setCursor(125, 180);
+    tft.print("Player 2");
+    tft.setTextSize(3);
+    tft.setCursor(80, 250);
+    tft.print("Games: " + mensaje.msgArray[2]);
+    tft.setCursor(260, 250);
+    tft.print("Points: " + mensaje.msgArray[3]);
+  } else {
+    tft.println("Error: Insufficient data for displaying tennis scores.");
+  }
 }
 
 void tilesAvanzadas2players(Result mensaje) {
@@ -156,6 +157,30 @@ void tilesAvanzadas1players(Result mensaje) {
   tft.print("Score: " + mensaje.msgArray[0]);  // Mostrar el personaje que selecciona Player 1
 }
 
+void dmgFighter(Result mensaje){
+  tft.fillScreen(BLACK);
+
+  // Configuración para Player 1 en la mitad superior de la pantalla
+  tft.setCursor(95, 40);  // Posicionar en la mitad superior de la pantalla
+  tft.setTextSize(6);
+  tft.print("Player 1");
+
+  tft.setCursor(80, 100);  // Un poco más abajo para el nombre del personaje
+  tft.setTextSize(4);
+  tft.println("Dano hecho: " + mensaje.msgArray[0]);
+  tft.print("");
+
+  // Configuración para Player 2 en la mitad inferior de la pantalla
+  tft.setCursor(95, 190);  // Posicionar en la mitad inferior de la pantalla
+  tft.setTextSize(6);
+  tft.print("Player 2");
+
+  tft.setCursor(80, 250);  // Un poco más abajo para el nombre del personaje
+  tft.setTextSize(4);
+  tft.println("Dano hecho: " + mensaje.msgArray[1]);  // Mostrar el personaje que selecciona Player 2
+  tft.print("");
+}
+
 
 void setup() {
   Serial.begin(9600);
@@ -165,10 +190,7 @@ void setup() {
 
   tft.setRotation(1);  
   tft.setTextColor(GREEN); 
-
-  prueba.msgArray[0]=200;
-  prueba.msgArray[1]=220;
-  tilesAvanzadas1players(prueba);
+  tft.setCursor(40, 40);
 
 }
 
@@ -211,10 +233,36 @@ void loop() {
 
   delay(1000);
 
+  
+  prueba.msgArray[0]=200;
+  prueba.msgArray[1]=220;
+  tilesAvanzadas1players(prueba);
+
+  delay(1000);
+
   */
   
     if (Serial.available()) {
       String string2convert = Serial.readStringUntil('\n');
       Result mensaje = string2array(string2convert);
+      if (mensaje.id == 1){
+        mostrarSeleccion2Personajes(mensaje);
+      }
+      if (mensaje.id == 2){
+        mostrarSeleccion1Personajes(mensaje);
+      }
+      if (mensaje.id == 3){
+        mostrarPuntuacionesTennis(mensaje);
+      }
+      if(mensaje.id == 4){
+        tilesAvanzadas2players(mensaje);
+      }
+      if (mensaje.id == 5){
+        tilesAvanzadas1players(mensaje);
+      }
+      if (mensaje.id == 6){
+        dmgFighter(mensaje);
+      }
+        
     }
 }

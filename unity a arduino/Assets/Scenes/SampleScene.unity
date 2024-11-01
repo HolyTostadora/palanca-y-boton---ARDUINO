@@ -306,11 +306,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80845444478d12b408d6a9370a2f983b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 3
+  id: 6
   prueba:
-  - lol
-  - l
-  - mao
+  - 10
+  - 10
+  - 10
+  - 10
 --- !u!1 &1228905526
 GameObject:
   m_ObjectHideFlags: 0

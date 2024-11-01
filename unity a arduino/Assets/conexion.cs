@@ -35,12 +35,18 @@ public class conexion : MonoBehaviour
         {
             Debug.LogError("Failed to open serial port: " + e.Message);
         }
-        
+
+
     }
 
     private void Update()
     {
         
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            SendMessagestoArduino(id, prueba);
+        }
+
     }
 
     public void SendMessagestoArduino(string identifier, string[] messages){
@@ -50,6 +56,7 @@ public class conexion : MonoBehaviour
         {
                 string msg2send = identifier + "," + string.Join(",", messages);
                 arduinoPort.WriteLine(msg2send);
+                Debug.Log(msg2send);
         }
         catch (System.Exception e)
         {
