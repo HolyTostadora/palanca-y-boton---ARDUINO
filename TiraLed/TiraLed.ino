@@ -1,6 +1,6 @@
 #include <FastLED.h>
 
-#define NUM_LEDS 5
+#define NUM_LEDS 13
 #define LED_PIN1 3
 #define LED_PIN2 4
 
