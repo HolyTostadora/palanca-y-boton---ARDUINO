@@ -10,12 +10,18 @@ struct Result {
 #define LCD_RD A0 
 #define LCD_RESET A4 
 
+#define NUM_LEDS 13
+#define LED_PIN1 3
+#define LED_PIN2 4
+
 #include <SPI.h>          
 #include "Adafruit_GFX.h"
 #include <MCUFRIEND_kbv.h>
+#include <FastLED.h>
+
 MCUFRIEND_kbv tft;
-
-
+CRGB leds1 [NUM_LEDS];
+CRGB leds2 [NUM_LEDS];
 
 #define BLACK   0x0000
 #define BLUE    0x001F
@@ -192,77 +198,219 @@ void setup() {
   tft.setTextColor(GREEN); 
   tft.setCursor(40, 40);
 
+  FastLED.addLeds<WS2812B,LED_PIN1,GRB>(leds1,NUM_LEDS);
+  FastLED.addLeds<WS2812B,LED_PIN2,GRB>(leds2,NUM_LEDS);
+  
+  FastLED.setBrightness(50);
 }
 
-void loop() {
 
- /*
-  prueba.msgArray[0] = "3";
-  prueba.msgArray[1] = "30";
-  
-  prueba.msgArray[2] = "5";
-  prueba.msgArray[3] = "45";
 
-  mostrarPuntuacionesTennis(prueba);
 
-  delay(1000);
 
-  prueba.msgArray[0] = "peron";
-
-  mostrarSeleccion1Personajes(prueba);
-
-  
-  delay(1000);
-
-  prueba.msgArray[0] = "leo";
-  prueba.msgArray[1] = "fierro";
-
-  mostrarSeleccion2Personajes(prueba);
-
-  delay(1000);
-
-  prueba.msgArray[0]=200;
-  prueba.msgArray[1]=220;
-  tilesAvanzadas1players(prueba);
-  
-  delay(1000);
-
-  prueba.msgArray[0]=2000;
-  prueba.msgArray[1]=2100;
-  tilesAvanzadas2players(prueba);
-
-  delay(1000);
-
-  
-  prueba.msgArray[0]=200;
-  prueba.msgArray[1]=220;
-  tilesAvanzadas1players(prueba);
-
-  delay(1000);
-
-  */
-  
+void loop() {  
     if (Serial.available()) {
       String string2convert = Serial.readStringUntil('\n');
       Result mensaje = string2array(string2convert);
       if (mensaje.id == 1){
-        mostrarSeleccion2Personajes(mensaje);
+        mostrarSeleccion1Personajes(mensaje);
       }
       if (mensaje.id == 2){
-        mostrarSeleccion1Personajes(mensaje);
+        mostrarSeleccion2Personajes(mensaje);
       }
       if (mensaje.id == 3){
         mostrarPuntuacionesTennis(mensaje);
       }
       if(mensaje.id == 4){
-        tilesAvanzadas2players(mensaje);
+        tilesAvanzadas1players(mensaje);
       }
       if (mensaje.id == 5){
-        tilesAvanzadas1players(mensaje);
+        tilesAvanzadas2players(mensaje);
       }
       if (mensaje.id == 6){
         dmgFighter(mensaje);
       }
-        
+      if (mensaje.id == 7){
+        recorrer1(mensaje);
+      }
+      if (mensaje.id==8){
+        recorrer2(mensaje);  
+      }
+      if (mensaje.id == 9){
+        recorrerIdaYVuelta1(mensaje);
+      }
+      if (mensaje.id == 10){
+        recorrerIdaYVuelta2(mensaje);
+      }
+      if (mensaje.id == 11){
+        todoLed1(mensaje);
+      }
+      if (mensaje.id == 12){
+        todoLed2(mensaje);
+      }
+      if (mensaje.id == 13){
+        selecLed1(mensaje);
+      }
+      if (mensaje.id == 14){
+        selecLed2(mensaje);
+      }
+   }
+}
+
+
+
+
+
+
+
+void recorrer1(Result mensaje) {
+  CRGB color = mensaje.msgArray[0];
+  int DELAY =  mensaje.msgArray[1].toInt();
+  
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds1[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i + 1 < NUM_LEDS) {  // Check to avoid going out of bounds
+      leds1[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
     }
+
+    leds1[i] = CRGB::Black;  // Turn off the current LED
+    FastLED.show();
+    delay(DELAY);
+  }
+}
+
+void recorrer2(Result mensaje) {
+  CRGB color = mensaje.msgArray[0];
+  int DELAY =  mensaje.msgArray[1].toInt();
+  
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds2[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i + 1 < NUM_LEDS) {  // Check to avoid going out of bounds
+      leds2[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds2[i] = CRGB::Black;  // Turn off the current LED
+    FastLED.show();
+    delay(DELAY);
+  }
+}
+
+void recorrerIdaYVuelta1(Result mensaje) {
+  CRGB color = mensaje.msgArray[0];
+  int DELAY =  mensaje.msgArray[1].toInt();
+  
+  // Barrido hacia adelante
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds1[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i + 1 < NUM_LEDS) {
+      leds1[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds1[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+
+  // Barrido hacia atrás
+  for (int i = NUM_LEDS - 1; i >= 0; i--) {
+    leds1[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i - 1 >= 0) {
+      leds1[i - 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds1[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+}
+
+void recorrerIdaYVuelta2(Result mensaje) {
+  CRGB color = mensaje.msgArray[0];
+  int DELAY =  mensaje.msgArray[1].toInt();
+  
+  // Barrido hacia adelante
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds2[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i + 1 < NUM_LEDS) {
+      leds2[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds2[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+
+  // Barrido hacia atrás
+  for (int i = NUM_LEDS - 1; i >= 0; i--) {
+    leds2[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i - 1 >= 0) {
+      leds2[i - 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds2[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+}
+
+void todoLed1(Result mensaje){
+  CRGB color = mensaje.msgArray[0];
+  
+  for (int i =0; i < NUM_LEDS; i++)
+  leds1[i] = color;
+  FastLED.show();
+}
+
+void todoLed2(Result mensaje){
+  CRGB color = mensaje.msgArray[0];
+  
+  for (int i =0; i < NUM_LEDS; i++)
+  leds2[i] = color;
+  FastLED.show();
+}
+
+void selecLed1(Result mensaje){
+  CRGB color = mensaje.msgArray[0];
+  int num_led = mensaje.msgArray[1].toInt();
+
+  leds1[num_led] = color;
+  FastLED.show();
+}
+
+void selecLed2(Result mensaje){
+  CRGB color = mensaje.msgArray[0];
+  int num_led = mensaje.msgArray[1].toInt();
+
+  leds2[num_led] = color;
+  FastLED.show();
 }
