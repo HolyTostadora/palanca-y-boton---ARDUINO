@@ -63,6 +63,13 @@ Result string2array(String string2convert) {
   return res;
 }
 
+void idlePantalla(){
+  tft.fillScreen(BLACK);
+  tft.setTextSize(8);
+  tft.setCursor(130, 180);
+  tft.print(".:TICARDE:.");
+}
+
 void mostrarSeleccion2Personajes(Result mensaje) {
   tft.fillScreen(BLACK);
 
@@ -212,6 +219,10 @@ void loop() {
     if (Serial.available()) {
       String string2convert = Serial.readStringUntil('\n');
       Result mensaje = string2array(string2convert);
+
+      if (mensaje.id == 0){
+        idlePantalla();
+      }
       if (mensaje.id == 1){
         mostrarSeleccion1Personajes(mensaje);
       }
@@ -254,6 +265,12 @@ void loop() {
       if (mensaje.id == 14){
         selecLed2(mensaje);
       }
+      if (mensaje.id == 15){
+        idaTotal(mensaje);
+      }
+      if (mensaje.id == 16){
+        idaYvueltaTotal(mensaje);
+      }
    }
 }
 
@@ -261,10 +278,17 @@ void loop() {
 
 
 
+CRGB hexToCRGB(uint32_t hexColor) {
+    uint8_t r = (hexColor >> 16) & 0xFF; // Extraer rojo (8 bits)
+    uint8_t g = (hexColor >> 8) & 0xFF;  // Extraer verde (8 bits)
+    uint8_t b = hexColor & 0xFF;         // Extraer azul (8 bits)
 
+    return CRGB(r, g, b);
+}
 
 void recorrer1(Result mensaje) {
-  CRGB color = mensaje.msgArray[0];
+  uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
+  CRGB color = hexToCRGB(hexColor);
   int DELAY =  mensaje.msgArray[1].toInt();
   
   for (int i = 0; i < NUM_LEDS; i++) {
@@ -285,7 +309,8 @@ void recorrer1(Result mensaje) {
 }
 
 void recorrer2(Result mensaje) {
-  CRGB color = mensaje.msgArray[0];
+  uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
+  CRGB color = hexToCRGB(hexColor);
   int DELAY =  mensaje.msgArray[1].toInt();
   
   for (int i = 0; i < NUM_LEDS; i++) {
@@ -306,7 +331,8 @@ void recorrer2(Result mensaje) {
 }
 
 void recorrerIdaYVuelta1(Result mensaje) {
-  CRGB color = mensaje.msgArray[0];
+  uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
+  CRGB color = hexToCRGB(hexColor);
   int DELAY =  mensaje.msgArray[1].toInt();
   
   // Barrido hacia adelante
@@ -345,7 +371,8 @@ void recorrerIdaYVuelta1(Result mensaje) {
 }
 
 void recorrerIdaYVuelta2(Result mensaje) {
-  CRGB color = mensaje.msgArray[0];
+  uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
+  CRGB color = hexToCRGB(hexColor);
   int DELAY =  mensaje.msgArray[1].toInt();
   
   // Barrido hacia adelante
@@ -384,7 +411,8 @@ void recorrerIdaYVuelta2(Result mensaje) {
 }
 
 void todoLed1(Result mensaje){
-  CRGB color = mensaje.msgArray[0];
+  uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
+  CRGB color = hexToCRGB(hexColor);
   
   for (int i =0; i < NUM_LEDS; i++)
   leds1[i] = color;
@@ -392,7 +420,8 @@ void todoLed1(Result mensaje){
 }
 
 void todoLed2(Result mensaje){
-  CRGB color = mensaje.msgArray[0];
+  uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
+  CRGB color = hexToCRGB(hexColor);
   
   for (int i =0; i < NUM_LEDS; i++)
   leds2[i] = color;
@@ -400,7 +429,8 @@ void todoLed2(Result mensaje){
 }
 
 void selecLed1(Result mensaje){
-  CRGB color = mensaje.msgArray[0];
+  uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
+  CRGB color = hexToCRGB(hexColor);
   int num_led = mensaje.msgArray[1].toInt();
 
   leds1[num_led] = color;
@@ -408,9 +438,124 @@ void selecLed1(Result mensaje){
 }
 
 void selecLed2(Result mensaje){
-  CRGB color = mensaje.msgArray[0];
+  uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
+  CRGB color = hexToCRGB(hexColor);
   int num_led = mensaje.msgArray[1].toInt();
 
   leds2[num_led] = color;
   FastLED.show();
+}
+
+void idaTotal(Result mensaje) {
+  uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
+  CRGB color = hexToCRGB(hexColor);
+  int DELAY = mensaje.msgArray[1].toInt();
+
+  // Primero recorre leds1
+  for (int i = NUM_LEDS-1; i >= 0; i--) {
+    leds1[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
+      leds1[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds1[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+
+  // Luego recorre leds2
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds2[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
+      leds2[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds2[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+}
+
+void idaYvueltaTotal (Result mensaje) {
+  uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
+  CRGB color = hexToCRGB(hexColor);
+  int DELAY = mensaje.msgArray[1].toInt();
+
+  // Recorre leds1 de ida
+  for (int i = NUM_LEDS-1; i >= 0; i--) {
+    leds1[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
+      leds1[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds1[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+
+  // Recorre leds2 de ida
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds2[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
+      leds2[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds2[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+
+  // Recorre leds2 de vuelta
+  for (int i = NUM_LEDS - 1; i >= 0; i--) {
+    leds2[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i - 1 >= 0) {  // Verifica para evitar desbordamiento
+      leds2[i - 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds2[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+
+  // Recorre leds1 de vuelta
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds1[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i - 1 >= 0) {  // Verifica para evitar desbordamiento
+      leds1[i - 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds1[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
 }
