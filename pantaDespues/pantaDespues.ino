@@ -37,31 +37,31 @@ Result prueba;
 Result string2array(String string2convert) {
   Result res;
   int index = 0;
-
-  // Divide the string by commas and store in the array
+  for (int i = 0; i < maxStrings; i++) {
+    res.msgArray[i] = "";
+  }
   while (string2convert.length() > 0 && index < maxStrings) {
     int commaIndex = string2convert.indexOf(',');
     if (commaIndex == -1) {
       res.msgArray[index] = string2convert;
-      break;
+      string2convert = "";
     } else {
       res.msgArray[index] = string2convert.substring(0, commaIndex);
       string2convert = string2convert.substring(commaIndex + 1);
     }
     index++;
   }
-
-  // Convert the first element to int and store in id
   res.id = res.msgArray[0].toInt();
-
-  // Shift elements left after extracting id
   for (int i = 0; i < index - 1; i++) {
     res.msgArray[i] = res.msgArray[i + 1];
   }
-  //res.msgArray[index - 1] = "";  // Clear last position if shifted
+  if (index > 0) {
+    res.msgArray[index - 1] = ""; 
+  }
 
   return res;
 }
+
 
 void idlePantalla(){
   tft.fillScreen(BLACK);
