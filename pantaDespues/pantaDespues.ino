@@ -65,8 +65,8 @@ Result string2array(String string2convert) {
 
 void idlePantalla(){
   tft.fillScreen(BLACK);
-  tft.setTextSize(8);
-  tft.setCursor(130, 180);
+  tft.setTextSize(7);
+  tft.setCursor(10, 130);
   tft.print(".:TICARDE:.");
 }
 
