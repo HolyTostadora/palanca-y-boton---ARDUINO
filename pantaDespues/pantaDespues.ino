@@ -301,42 +301,112 @@ void idaTotal(Result mensaje) {
   CRGB color = hexToCRGB(hexColor);
   int DELAY = mensaje.msgArray[1].toInt();
 
-  for (int i = 0; i < NUM_LEDS; i++) {
+  // Primero recorre leds1
+  for (int i = NUM_LEDS-1; i >= 0; i--) {
     leds1[i] = color;
     FastLED.show();
     delay(DELAY);
-    leds1[i] = CRGB::Black;
+
+    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
+      leds1[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds1[i] = CRGB::Black;  // Apaga el LED actual
     FastLED.show();
+    delay(DELAY);
   }
 
+  // Luego recorre leds2
   for (int i = 0; i < NUM_LEDS; i++) {
     leds2[i] = color;
     FastLED.show();
     delay(DELAY);
-    leds2[i] = CRGB::Black;
+
+    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
+      leds2[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds2[i] = CRGB::Black;  // Apaga el LED actual
     FastLED.show();
+    delay(DELAY);
   }
 }
 
-void idaYvueltaTotal(Result mensaje) {
+void idaYvueltaTotal (Result mensaje) {
   uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
   CRGB color = hexToCRGB(hexColor);
   int DELAY = mensaje.msgArray[1].toInt();
 
+  // Recorre leds1 de ida
+  for (int i = NUM_LEDS-1; i >= 0; i--) {
+    leds1[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
+      leds1[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds1[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+
+  // Recorre leds2 de ida
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds2[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
+      leds2[i + 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds2[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+
+  // Recorre leds2 de vuelta
+  for (int i = NUM_LEDS - 1; i >= 0; i--) {
+    leds2[i] = color;
+    FastLED.show();
+    delay(DELAY);
+
+    if (i - 1 >= 0) {  // Verifica para evitar desbordamiento
+      leds2[i - 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds2[i] = CRGB::Black;  // Apaga el LED actual
+    FastLED.show();
+    delay(DELAY);
+  }
+
+  // Recorre leds1 de vuelta
   for (int i = 0; i < NUM_LEDS; i++) {
     leds1[i] = color;
     FastLED.show();
     delay(DELAY);
-    leds1[i] = CRGB::Black;
-    FastLED.show();
-  }
 
-  for (int i = NUM_LEDS - 1; i >= 0; i--) {
-    leds1[i] = color;
+    if (i - 1 >= 0) {  // Verifica para evitar desbordamiento
+      leds1[i - 1] = color;
+      FastLED.show();
+      delay(DELAY);
+    }
+
+    leds1[i] = CRGB::Black;  // Apaga el LED actual
     FastLED.show();
     delay(DELAY);
-    leds1[i] = CRGB::Black;
-    FastLED.show();
   }
 }
 
