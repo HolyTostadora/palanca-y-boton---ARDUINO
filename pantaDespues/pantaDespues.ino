@@ -8,7 +8,8 @@ struct Result {
 #define LCD_CD A2 
 #define LCD_WR A1 
 #define LCD_RD A0 
-#define LCD_RESET A4´ñ 
+#define LCD_RESET A4
+
 
 #define NUM_LEDS 13
 #define LED_PIN1 3
