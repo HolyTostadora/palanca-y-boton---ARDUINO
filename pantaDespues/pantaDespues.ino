@@ -8,7 +8,7 @@ struct Result {
 #define LCD_CD A2 
 #define LCD_WR A1 
 #define LCD_RD A0 
-#define LCD_RESET A4 
+#define LCD_RESET A4´ñ 
 
 #define NUM_LEDS 13
 #define LED_PIN1 3
@@ -302,16 +302,10 @@ void idaTotal(Result mensaje) {
   int DELAY = mensaje.msgArray[1].toInt();
 
   // Primero recorre leds1
-  for (int i = NUM_LEDS-1; i >= 0; i--) {
+  for (int i = NUM_LEDS - 1; i >= 0; i--) {
     leds1[i] = color;
     FastLED.show();
     delay(DELAY);
-
-    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
-      leds1[i + 1] = color;
-      FastLED.show();
-      delay(DELAY);
-    }
 
     leds1[i] = CRGB::Black;  // Apaga el LED actual
     FastLED.show();
@@ -324,34 +318,22 @@ void idaTotal(Result mensaje) {
     FastLED.show();
     delay(DELAY);
 
-    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
-      leds2[i + 1] = color;
-      FastLED.show();
-      delay(DELAY);
-    }
-
     leds2[i] = CRGB::Black;  // Apaga el LED actual
     FastLED.show();
     delay(DELAY);
   }
 }
 
-void idaYvueltaTotal (Result mensaje) {
+void idaYvueltaTotal(Result mensaje) {
   uint32_t hexColor = (uint32_t)strtoul(mensaje.msgArray[0].c_str(), NULL, 16);  
   CRGB color = hexToCRGB(hexColor);
   int DELAY = mensaje.msgArray[1].toInt();
 
   // Recorre leds1 de ida
-  for (int i = NUM_LEDS-1; i >= 0; i--) {
+  for (int i = NUM_LEDS - 1; i >= 0; i--) {
     leds1[i] = color;
     FastLED.show();
     delay(DELAY);
-
-    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
-      leds1[i + 1] = color;
-      FastLED.show();
-      delay(DELAY);
-    }
 
     leds1[i] = CRGB::Black;  // Apaga el LED actual
     FastLED.show();
@@ -364,12 +346,6 @@ void idaYvueltaTotal (Result mensaje) {
     FastLED.show();
     delay(DELAY);
 
-    if (i + 1 < NUM_LEDS) {  // Verifica para evitar desbordamiento
-      leds2[i + 1] = color;
-      FastLED.show();
-      delay(DELAY);
-    }
-
     leds2[i] = CRGB::Black;  // Apaga el LED actual
     FastLED.show();
     delay(DELAY);
@@ -380,12 +356,6 @@ void idaYvueltaTotal (Result mensaje) {
     leds2[i] = color;
     FastLED.show();
     delay(DELAY);
-
-    if (i - 1 >= 0) {  // Verifica para evitar desbordamiento
-      leds2[i - 1] = color;
-      FastLED.show();
-      delay(DELAY);
-    }
 
     leds2[i] = CRGB::Black;  // Apaga el LED actual
     FastLED.show();
@@ -398,17 +368,12 @@ void idaYvueltaTotal (Result mensaje) {
     FastLED.show();
     delay(DELAY);
 
-    if (i - 1 >= 0) {  // Verifica para evitar desbordamiento
-      leds1[i - 1] = color;
-      FastLED.show();
-      delay(DELAY);
-    }
-
     leds1[i] = CRGB::Black;  // Apaga el LED actual
     FastLED.show();
     delay(DELAY);
   }
 }
+
 
 void setup() {
   Serial.begin(9600);
