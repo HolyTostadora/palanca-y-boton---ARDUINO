@@ -12,8 +12,8 @@ struct Result {
 
 
 #define NUM_LEDS 13
-#define LED_PIN1 3
-#define LED_PIN2 4
+#define LED_PIN1 53
+#define LED_PIN2 51
 
 #include <SPI.h>          
 #include "Adafruit_GFX.h"
