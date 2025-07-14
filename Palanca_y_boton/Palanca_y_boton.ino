@@ -19,6 +19,10 @@
 #define BTN_P A5
 
 #define BTN_MENU 7
+#define SENSOR_CREDIT 12
+
+unsigned long lastPressTime = 0;
+bool sensorPrevState = LOW;
 
 #define D/C 12
 #define CS 13
@@ -49,13 +53,33 @@ void setup()
   pinMode(BTN_P,INPUT_PULLUP);
 
   pinMode(BTN_MENU, INPUT_PULLUP);
+  pinMode(SENSOR_CREDIT, INPUT);
 
   Keyboard.begin();
+  Serial.begin(9600);
 
 }
 
 void loop()
 {
+
+  bool sensorState = digitalRead(SENSOR_CREDIT);
+
+  unsigned long currentTime = millis();
+
+  if (sensorState == HIGH && sensorPrevState == LOW) {
+    if (currentTime - lastPressTime > 250) {
+      Keyboard.press('c');
+      delay(10); 
+      Keyboard.release('c');
+      lastPressTime = currentTime;
+      Serial.println("C enviada");
+    }
+  }
+
+  sensorPrevState = sensorState;
+
+
 
   BTN_on_click(ARRIBA1,'w');
   BTN_on_click(ABAJO1,'s');
