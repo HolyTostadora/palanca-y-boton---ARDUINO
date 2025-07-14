@@ -24,7 +24,6 @@
 unsigned long lastPressTime = 0;
 bool sensorPrevState = LOW;
 
-#define D/C 12
 #define CS 13
 #define SDI 6
 #define SCK 7
