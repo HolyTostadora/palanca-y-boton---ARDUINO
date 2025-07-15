@@ -55,7 +55,6 @@ void setup()
   pinMode(SENSOR_CREDIT, INPUT);
 
   Keyboard.begin();
-  Serial.begin(9600);
 
 }
 
@@ -72,7 +71,6 @@ void loop()
       delay(10); 
       Keyboard.release('c');
       lastPressTime = currentTime;
-      Serial.println("C enviada");
     }
   }
 
